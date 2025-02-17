@@ -1,0 +1,18 @@
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Log files
+*.log
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Keep required folders
+!bin/
+!src/
+!test/
+!doc/
