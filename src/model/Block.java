@@ -60,13 +60,10 @@ public class Block {
             throw new IllegalArgumentException("Block " + id + " is empty");
         }
 
-        // Create visited array
         boolean[][] visited = new boolean[shape.length][shape[0].length];
 
-        // Do flood fill from starting point
         floodFill(startI, startJ, visited);
 
-        // Check if all true cells were visited
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[0].length; j++) {
                 if (shape[i][j] && !visited[i][j]) {
@@ -77,20 +74,16 @@ public class Block {
     }
 
     private void floodFill(int i, int j, boolean[][] visited) {
-        // Check bounds
         if (i < 0 || i >= shape.length || j < 0 || j >= shape[0].length) {
             return;
         }
 
-        // Check if cell is part of block and not visited
         if (!shape[i][j] || visited[i][j]) {
             return;
         }
 
-        // Mark as visited
         visited[i][j] = true;
 
-        // Visit adjacent cells (up, right, down, left)
         floodFill(i-1, j, visited);  // up
         floodFill(i, j+1, visited);  // right
         floodFill(i+1, j, visited);  // down

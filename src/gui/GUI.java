@@ -119,7 +119,6 @@ public class GUI extends Application {
                     "Time taken: " + (endTime - startTime) + " ms\n" +
                     "Iterations: " + solver.getIterationCount());
 
-            // Ask user if they want to save the solution
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Save Solution");
             alert.setHeaderText("Would you like to save this solution?");
@@ -152,12 +151,9 @@ public class GUI extends Application {
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             try {
-                // Save solution to file
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                    // Write board dimensions
                     writer.write(board.getRow() + " " + board.getColumn() + "\n");
 
-                    // Write solution grid
                     for (int i = 0; i < board.getRow(); i++) {
                         for (int j = 0; j < board.getColumn(); j++) {
                             writer.write(board.getCell(i, j));
@@ -176,7 +172,6 @@ public class GUI extends Application {
     private void updateBoardView() {
         boardView.getChildren().clear();
 
-        // Create cells with equal size
         double cellSize = 40;
 
         for (int i = 0; i < board.getRow(); i++) {
@@ -186,11 +181,9 @@ public class GUI extends Application {
                 cell.setStyle("-fx-background-color: white; -fx-border-color: black;");
 
                 if (board.getCell(i, j) != '.') {
-                    // Get color based on block ID
                     String color = getColorForBlock(board.getCell(i, j));
                     cell.setStyle("-fx-background-color: " + color + "; -fx-border-color: black;");
 
-                    // Add label with block ID
                     Label label = new Label(String.valueOf(board.getCell(i, j)));
                     label.setStyle("-fx-text-fill: white;");
                     cell.getChildren().add(label);

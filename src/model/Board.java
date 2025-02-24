@@ -58,12 +58,10 @@ public class Board {
     public boolean canPlaceBlock(Block block, int row, int col) {
         boolean[][] shape = block.getShape();
 
-        // out of bounds check
         if (row + shape.length > rows || col + shape[0].length > cols) {
             return false;
         }
 
-        // check if the block can be placed
         for (int i = 0; i < shape.length; i++) {
             for (int j = 0; j < shape[0].length; j++) {
                 if (shape[i][j] && grid[row + i][col + j] != '.') {

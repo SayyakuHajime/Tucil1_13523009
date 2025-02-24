@@ -85,7 +85,7 @@ public class BruteForceSolver {
 
     private boolean solveRecursive(int depth) {
         if (isAllBlocksUsed()) {
-            return isBoardFilled(); // Add this check
+            return isBoardFilled();
         }
 
         int emptyCells = calculateEmptyCells();

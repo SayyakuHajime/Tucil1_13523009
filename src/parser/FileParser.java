@@ -71,7 +71,6 @@ public class FileParser {
 
                     if (currentBlockLines.isEmpty() || firstChar != currentId) {
                         if (!currentBlockLines.isEmpty()) {
-                            // Validate block before adding
                             validateBlock(currentId, currentBlockLines);
                             blocks.add(new Block(currentId, currentBlockLines.toArray(new String[0])));
                             currentBlockLines.clear();
