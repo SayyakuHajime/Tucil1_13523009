@@ -52,17 +52,12 @@ public class FileParser {
                 }
             }
 
-            // System.out.println("Reading blocks:");
-
             List<Block> blocks = new ArrayList<>();
             List<String> currentBlockLines = new ArrayList<>();
             String line;
             char currentId = '\0';
 
             while ((line = reader.readLine()) != null) {
-
-                // System.out.println("Read line: '" + line + "'");
-
                 String trimmedLine = line.trim();
 
                 if (!trimmedLine.isEmpty()) {
@@ -76,16 +71,11 @@ public class FileParser {
 
                     if (currentBlockLines.isEmpty() || firstChar != currentId) {
                         if (!currentBlockLines.isEmpty()) {
-                            // System.out.println("Creating block with id: " + currentId);
-                            /*
-                            for (String blockLine : currentBlockLines) {
-                                System.out.println("  " + blockLine);
-                            }
-                             */
+                            // Validate block before adding
+                            validateBlock(currentId, currentBlockLines);
                             blocks.add(new Block(currentId, currentBlockLines.toArray(new String[0])));
                             currentBlockLines.clear();
                         }
-                        // Start new block
                         currentId = firstChar;
                         currentBlockLines.add(line);
                     } else {
@@ -95,22 +85,41 @@ public class FileParser {
             }
 
             if (!currentBlockLines.isEmpty()) {
-                System.out.println("Creating final block with id: " + currentId);
-
-                for (String blockLine : currentBlockLines) {
-                    System.out.println("  " + blockLine);
-                }
-
+                // Validate final block
+                validateBlock(currentId, currentBlockLines);
                 blocks.add(new Block(currentId, currentBlockLines.toArray(new String[0])));
             }
 
-            System.out.println("\nTotal blocks parsed: " + blocks.size());
             if (blocks.size() != numBlocks) {
                 throw new IOException("Number of parsed blocks (" + blocks.size() +
                         ") doesn't match specified count (" + numBlocks + ")");
             }
 
             return new PuzzleConfig(rows, cols, numBlocks, puzzleType, blocks);
+        }
+    }
+
+    private static void validateBlock(char id, List<String> blockLines) throws IOException {
+        // Check if block is empty
+        if (blockLines.isEmpty()) {
+            throw new IOException("Block " + id + " is empty");
+        }
+
+        // Check if block has only spaces
+        boolean hasNonSpace = false;
+        for (String line : blockLines) {
+            if (!line.trim().isEmpty()) {
+                hasNonSpace = true;
+                break;
+            }
+        }
+        if (!hasNonSpace) {
+            throw new IOException("Block " + id + " contains only spaces");
+        }
+
+        // Check if block character is valid (A-Z)
+        if (id < 'A' || id > 'Z') {
+            throw new IOException("Invalid block identifier: " + id + ". Must be A-Z");
         }
     }
 }

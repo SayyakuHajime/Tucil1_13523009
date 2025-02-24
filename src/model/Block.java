@@ -4,7 +4,7 @@ public class Block {
     private final char id;
     private final boolean[][] shape;
 
-    public Block(char id, String[] lines) {
+    public Block(char id, String[] lines) throws IllegalArgumentException {
         this.id = id;
 
         int maxWidth = 0;
@@ -21,12 +21,14 @@ public class Block {
             }
         }
         findAnchorPoint();
+        validateConnectivity();
     }
 
     public Block(char id, boolean[][] shape) {
         this.id = id;
         this.shape = shape;
         findAnchorPoint();
+        validateConnectivity();
     }
 
     private void findAnchorPoint() {
@@ -38,6 +40,61 @@ public class Block {
             }
         }
         throw new IllegalArgumentException("No valid anchor point found");
+    }
+
+    private void validateConnectivity() {
+        // Find first true cell as starting point
+        int startI = -1, startJ = -1;
+        outerLoop:
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[0].length; j++) {
+                if (shape[i][j]) {
+                    startI = i;
+                    startJ = j;
+                    break outerLoop;
+                }
+            }
+        }
+
+        if (startI == -1) {
+            throw new IllegalArgumentException("Block " + id + " is empty");
+        }
+
+        // Create visited array
+        boolean[][] visited = new boolean[shape.length][shape[0].length];
+
+        // Do flood fill from starting point
+        floodFill(startI, startJ, visited);
+
+        // Check if all true cells were visited
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[0].length; j++) {
+                if (shape[i][j] && !visited[i][j]) {
+                    throw new IllegalArgumentException("Block " + id + " has disconnected pieces");
+                }
+            }
+        }
+    }
+
+    private void floodFill(int i, int j, boolean[][] visited) {
+        // Check bounds
+        if (i < 0 || i >= shape.length || j < 0 || j >= shape[0].length) {
+            return;
+        }
+
+        // Check if cell is part of block and not visited
+        if (!shape[i][j] || visited[i][j]) {
+            return;
+        }
+
+        // Mark as visited
+        visited[i][j] = true;
+
+        // Visit adjacent cells (up, right, down, left)
+        floodFill(i-1, j, visited);  // up
+        floodFill(i, j+1, visited);  // right
+        floodFill(i+1, j, visited);  // down
+        floodFill(i, j-1, visited);  // left
     }
 
     public char getId() {

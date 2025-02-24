@@ -68,7 +68,16 @@ public class BruteForceSolver {
             }
         }
     }
-
+    private boolean isBoardFilled() {
+        for (int i = 0; i < board.getRow(); i++) {
+            for (int j = 0; j < board.getColumn(); j++) {
+                if (board.getCell(i, j) == '.') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     public boolean solve() {
         System.out.println("Starting solve with " + blocks.size() + " blocks");
         return solveRecursive(0);
@@ -76,11 +85,10 @@ public class BruteForceSolver {
 
     private boolean solveRecursive(int depth) {
         if (isAllBlocksUsed()) {
-            return true;
+            return isBoardFilled(); // Add this check
         }
 
         int emptyCells = calculateEmptyCells();
-
         int remainingNeededCells = calculateRemainingNeededCells();
 
         if (emptyCells < remainingNeededCells) {
