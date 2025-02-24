@@ -1,5 +1,5 @@
 4 4 4
-AAAA
+DEFAULT
 AA
  AA
 AA
