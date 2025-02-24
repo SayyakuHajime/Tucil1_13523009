@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Scanner;
+// Import for GUI
+import javafx.application.Application;
+import gui.GUI;
 
 
 public class Main {
     public static void main(String[] args) {
-        // for GUI
+        // For GUI, uncomment this line and comment the rest of the code optionally.
         // Application.launch(GUI.class, args);
         try {
             Scanner scanner = new Scanner(System.in);
@@ -23,13 +26,7 @@ public class Main {
                 testFile = scanner.nextLine().trim();
             }
 
-            System.out.println("Reading puzzle from " + testFile + "...");
             FileParser.PuzzleConfig config = FileParser.parseFile(testFile);
-            System.out.println("testFile value before parsing: " + testFile);
-
-            System.out.println("\nPuzzle configuration:");
-            System.out.println("Board size: " + config.rows + "x" + config.cols);
-            System.out.println("Number of blocks: " + config.blocks.size());
 
             Board board = new Board(config.rows, config.cols);
             BruteForceSolver solver = new BruteForceSolver(board, config.blocks);

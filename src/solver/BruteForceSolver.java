@@ -16,7 +16,8 @@ public class BruteForceSolver {
         this.iterationCount = 0;
         this.used = new boolean[blocks.size()];
 
-        // Calculate total cells needed
+        validateInput();
+
         int totalBlockCells = 0;
         for (Block block : blocks) {
             boolean[][] shape = block.getShape();
@@ -29,11 +30,42 @@ public class BruteForceSolver {
             }
         }
 
-        // Check if solution is possible based on board size and total blocks
         int boardSize = board.getRow() * board.getColumn();
         if (totalBlockCells > boardSize) {
             System.out.println("Warning: Total block cells (" + totalBlockCells +
                     ") exceed board size (" + boardSize + "). No solution possible.");
+        }
+    }
+
+    private void validateInput() {
+        if (board.getRow() <= 0 || board.getColumn() <= 0) {
+            throw new IllegalArgumentException("Board dimensions must be positive.");
+        }
+
+        if (blocks == null || blocks.size() < 1) {
+            throw new IllegalArgumentException("There must be at least one block.");
+        }
+
+        for (Block block : blocks) {
+            if (block == null || block.getShape() == null) {
+                throw new IllegalArgumentException("Block and its shape must not be null.");
+            }
+
+            boolean[][] shape = block.getShape();
+            boolean hasTrue = false;
+            for (int i = 0; i < shape.length; i++) {
+                for (int j = 0; j < shape[i].length; j++) {
+                    if (shape[i][j]) {
+                        hasTrue = true;
+                        break;
+                    }
+                }
+                if (hasTrue) break;
+            }
+
+            if (!hasTrue) {
+                throw new IllegalArgumentException("Block must have at least one cell.");
+            }
         }
     }
 
@@ -47,13 +79,10 @@ public class BruteForceSolver {
             return true;
         }
 
-        // Calculate remaining empty cells on board
         int emptyCells = calculateEmptyCells();
 
-        // Calculate remaining cells needed
         int remainingNeededCells = calculateRemainingNeededCells();
 
-        // If we don't have enough empty cells for remaining blocks, stop this branch
         if (emptyCells < remainingNeededCells) {
             return false;
         }

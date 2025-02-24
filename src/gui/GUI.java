@@ -11,6 +11,9 @@ import model.Board;
 import parser.FileParser;
 import solver.BruteForceSolver;
 import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GUI extends Application {
     private BorderPane mainLayout;
@@ -115,10 +118,58 @@ public class GUI extends Application {
             outputArea.setText("Solution found!\n" +
                     "Time taken: " + (endTime - startTime) + " ms\n" +
                     "Iterations: " + solver.getIterationCount());
+
+            // Ask user if they want to save the solution
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Save Solution");
+            alert.setHeaderText("Would you like to save this solution?");
+            alert.setContentText("Choose your option.");
+
+            ButtonType buttonTypeSave = new ButtonType("Save");
+            ButtonType buttonTypeCancel = new ButtonType("Don't Save", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            alert.getButtonTypes().setAll(buttonTypeSave, buttonTypeCancel);
+
+            alert.showAndWait().ifPresent(response -> {
+                if (response == buttonTypeSave) {
+                    handleSaveSolution();
+                }
+            });
         } else {
             outputArea.setText("No solution exists.\n" +
                     "Time taken: " + (endTime - startTime) + " ms\n" +
                     "Iterations: " + solver.getIterationCount());
+        }
+    }
+
+    private void handleSaveSolution() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Solution");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt")
+        );
+
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            try {
+                // Save solution to file
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                    // Write board dimensions
+                    writer.write(board.getRow() + " " + board.getColumn() + "\n");
+
+                    // Write solution grid
+                    for (int i = 0; i < board.getRow(); i++) {
+                        for (int j = 0; j < board.getColumn(); j++) {
+                            writer.write(board.getCell(i, j));
+                        }
+                        writer.newLine();
+                    }
+
+                    outputArea.appendText("\nSolution saved to: " + file.getPath());
+                }
+            } catch (IOException e) {
+                outputArea.appendText("\nError saving solution: " + e.getMessage());
+            }
         }
     }
 

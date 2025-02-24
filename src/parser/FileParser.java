@@ -29,7 +29,9 @@ public class FileParser {
                 System.out.println("\nBlock " + block.getId() + ":");
                 System.out.println(block.toString());
             }
+
              */
+
         }
     }
 
@@ -41,6 +43,14 @@ public class FileParser {
             int numBlocks = Integer.parseInt(dimensions[2]);
 
             String puzzleType = reader.readLine().trim();
+            if (!puzzleType.equals("DEFAULT")) {
+                if (!puzzleType.equals("CUSTOM") && !puzzleType.equals("PYRAMID")) {
+                    throw new IOException("Invalid puzzle type: " + puzzleType);
+                }
+                else {
+                    throw new IOException("Puzzle type not supported yet");
+                }
+            }
 
             // System.out.println("Reading blocks:");
 
@@ -85,16 +95,16 @@ public class FileParser {
             }
 
             if (!currentBlockLines.isEmpty()) {
-                // System.out.println("Creating final block with id: " + currentId);
-                /*
+                System.out.println("Creating final block with id: " + currentId);
+
                 for (String blockLine : currentBlockLines) {
                     System.out.println("  " + blockLine);
                 }
-                 */
+
                 blocks.add(new Block(currentId, currentBlockLines.toArray(new String[0])));
             }
 
-            // System.out.println("\nTotal blocks parsed: " + blocks.size());
+            System.out.println("\nTotal blocks parsed: " + blocks.size());
             if (blocks.size() != numBlocks) {
                 throw new IOException("Number of parsed blocks (" + blocks.size() +
                         ") doesn't match specified count (" + numBlocks + ")");
