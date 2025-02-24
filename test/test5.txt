@@ -1,12 +1,16 @@
-5 5 3
+5 5 7
 DEFAULT
 AAAAA
-A   A
-    A
-  A A
-  AAA
+A
+ R
+ R
+ R
+RR
+QQ
 B
 BB
- CCC
-CCCC
- C C
+SSS
+CC
+ C
+TT
+ T
