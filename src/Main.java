@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Scanner;
-// Import for GUI
+// Import for GUI, comment this if using CLI only
 import javafx.application.Application;
 import gui.GUI;
 
@@ -17,6 +17,7 @@ public class Main {
         String mode = scanner.nextLine().trim().toLowerCase();
 
         if (mode.equals("gui")) {
+            // Comment this if using CLI only
             Application.launch(GUI.class, args);
         } else {
             try {
